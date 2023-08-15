@@ -83,7 +83,9 @@ return [
     |
     */
 
-    'locale' => 'en',
+    // https://laravel.com/docs/10.x/localization#using-short-keys
+    // for languages that differ by territory, use the ISO 15897 format to name the lang directory
+    'locale' => 'pt_BR',
 
     /*
     |--------------------------------------------------------------------------

@@ -3,14 +3,38 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    // https://www.educative.io/answers/how-to-use-uuids-in-laravel
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if ($model->getKey() === null) {
+                $model->setAttribute($model->getKeyName(), Str::uuid()->toString());
+            }
+        });
+    }
+    //
+    public function getIncrementing()
+    {
+        return false;
+    }
+    //
+    public function getKeyType()
+    {
+        return 'string';
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -18,9 +42,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
+        'celular',
     ];
 
     /**
@@ -42,4 +66,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function subclass(): MorphTo
+    {
+        return $this->morphTo('subclass');
+    }
 }
