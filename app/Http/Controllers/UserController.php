@@ -76,7 +76,7 @@ class UserController extends Controller
             'cidade' => 'required_if:role,empresa|missing_unless:role,empresa|string|max:40',
             'estado' => 'required_if:role,empresa|missing_unless:role,empresa|string|max:25',
             'cep' => 'required_if:role,empresa|missing_unless:role,empresa|string|regex:/^\d*$/|size:8',
-            'complemento' => 'missing_unless:role,empresa|string|max:255',
+            'complemento' => 'missing_unless:role,empresa|string|nullable|max:255',
         ];
 
         $only_numbers_msg = 'O campo de :attribute deve conter apenas números.';

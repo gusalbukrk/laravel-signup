@@ -1,0 +1,41 @@
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    padding: 2rem;
+}
+
+form > div {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    margin-right: .5rem;
+}
+
+ul.input-error {
+    margin-top: .5rem;
+    margin-left: 2rem;
+    color: red;
+}
+
+ul.input-error .attribute,
+ul.input-error .other,
+ul.input-error .value {
+    background-color: lightgray;
+    padding: 0 .25rem;
+}
+
+form > div:has(input[required]) label::after {
+    content: "*";
+    margin-left: .25rem;
+    color: red;
+}
+
+.alert {
+    color: red;
+    margin-bottom: 1rem;
+}
