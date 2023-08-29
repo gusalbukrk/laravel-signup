@@ -49,45 +49,38 @@ class UserController extends Controller
             // common fields
             'role' => 'required|string|in:cliente,empresa',
             'email' => 'required|email|min:10|unique:users',
-            'celular' => 'required|string|regex:/^\d*$/|size:11|unique:users',
+            'celular' => 'required|integer|digits:11|unique:users',
             'password' => 'required|string|min:8|confirmed',
 
             // cliente-only fields
-            'inscricao_estadual' => 'required_if:role,cliente|missing_unless:role,cliente|string|regex:/^\d*$/|min:6|max:10|unique:clientes',
+            'inscricao_estadual' => 'required_if:role,cliente|missing_unless:role,cliente|integer|digits_between:6,10|unique:clientes',
             'is_pessoa_fisica' => 'required_if:role,cliente|missing_unless:role,cliente|boolean',
             //
             // required only if: is_pessoa_fisica,true
             'nome' => 'missing_unless:role,cliente|required_if:is_pessoa_fisica,true|missing_if:is_pessoa_fisica,false|string|nullable|max:255',
-            'cpf' => 'missing_unless:role,cliente|required_if:is_pessoa_fisica,true|missing_if:is_pessoa_fisica,false|string|nullable|regex:/^\d*$/|size:11|unique:clientes',
+            'cpf' => 'missing_unless:role,cliente|required_if:is_pessoa_fisica,true|missing_if:is_pessoa_fisica,false|integer|nullable|digits:11|unique:clientes',
 
             // required only if: (role,cliente && is_pessoa_fisica,false) OR (role,empresa)
             'razao_social' => 'required_if:is_pessoa_fisica,false|missing_if:is_pessoa_fisica,true|required_if:role,empresa|string|nullable|max:255',
             //
             // NOTE: currently checking if CNPJ is unique in both clientes and empresas tables
             // would be better instead to check for uniqueness only in the table of the current role
-            'cnpj' => 'required_if:is_pessoa_fisica,false|missing_if:is_pessoa_fisica,true|required_if:role,empresa|string|nullable|regex:/^\d*$/|size:14|unique:clientes|unique:empresas',
+            'cnpj' => 'required_if:is_pessoa_fisica,false|missing_if:is_pessoa_fisica,true|required_if:role,empresa|integer|digits:14|unique:clientes|unique:empresas',
 
             // empresa-only fields
             'nome_fantasia' => 'missing_unless:role,empresa|string|nullable|max:255',
-            'telefone_comercial' => 'missing_unless:role,empresa|string|nullable|regex:/^\d*$/|size:10|unique:empresas',
+            'telefone_comercial' => 'missing_unless:role,empresa|integer|nullable|digits:10|unique:empresas',
             'rua' => 'required_if:role,empresa|missing_unless:role,empresa|string|max:120',
             'numero' => 'required_if:role,empresa|missing_unless:role,empresa|integer',
             'bairro' => 'required_if:role,empresa|missing_unless:role,empresa|string|max:60',
             'cidade' => 'required_if:role,empresa|missing_unless:role,empresa|string|max:40',
             'estado' => 'required_if:role,empresa|missing_unless:role,empresa|string|max:25',
-            'cep' => 'required_if:role,empresa|missing_unless:role,empresa|string|regex:/^\d*$/|size:8',
+            'cep' => 'required_if:role,empresa|missing_unless:role,empresa|integer|digits:8',
             'complemento' => 'missing_unless:role,empresa|string|nullable|max:255',
         ];
 
-        $only_numbers_msg = 'O campo de :attribute deve conter apenas números.';
-        //
         $messages = [ // custom error messages
-            'celular.regex' => $only_numbers_msg,
-            'inscricao_estadual.regex' => $only_numbers_msg,
-            'cpf.regex' => $only_numbers_msg,
-            'cnpj.regex' => $only_numbers_msg,
-            'telefone_comercial.regex' => $only_numbers_msg,
-            'cep.regex' => $only_numbers_msg,
+            //
         ];
 
         $attributes = [ // customize validation messages' `:attribute` placeholders
